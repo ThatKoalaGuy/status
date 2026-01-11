@@ -1,5 +1,7 @@
 ---
+import '../styles/global.css';
 
+import Navbar from '../components/Navbar.astro';
 ---
 
 <html lang="en">
@@ -8,9 +10,9 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Status</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="font-inter bg-zinc-800">
+		<Navbar />
 	</body>
 </html>
