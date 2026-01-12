@@ -1,18 +1,64 @@
 ---
 import '../styles/global.css';
-
 import Navbar from '../components/Navbar.astro';
+import Card from '../components/Card.astro';
+
+const services = [
+	{ name: 'domenkoder.com', url: 'https://domenkoder.com/status' },
+	{
+		name: 'status.domenkoder.com',
+		url: 'https://status.domenkoder.com/status',
+	},
+	{
+		name: 'pgd-tolmin.si',
+		url: 'https://pgd-tolmin.si',
+	},
+];
+
+const results = await Promise.all(
+	services.map(async (s) => {
+		try {
+			const res = await fetch(s.url);
+
+			if (!res.ok) {
+				throw new Error('Bad response');
+			}
+
+			const data = await res.json();
+
+			return {
+				name: s.name,
+				status: data.status ?? 'down',
+				time: data.time ?? new Date().toISOString(),
+			};
+		} catch {
+			return {
+				name: s.name,
+				status: 'down',
+				time: new Date().toISOString(),
+			};
+		}
+	})
+);
 ---
 
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
 		<title>Status</title>
 	</head>
-	<body class="font-inter bg-zinc-800">
+
+	<body class="font-inter bg-zinc-800 text-zinc-100">
 		<Navbar />
+
+		<main class="mx-auto max-w-6xl p-4 mt-5">
+			<div class="text-2xl">Online services</div>
+			<div
+				class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 border-2 border-blue-500 rounded-2xl p-3 mt-3"
+			>
+				{results.map((service) => <Card {...service} />)}
+			</div>
+		</main>
 	</body>
 </html>

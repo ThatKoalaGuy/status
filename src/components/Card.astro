@@ -1,0 +1,27 @@
+---
+const {
+	name = 'Unknown',
+	status = 'down',
+	time = new Date().toISOString(),
+} = Astro.props;
+
+const isOk = status === 'ok';
+---
+
+<div class="rounded-xl bg-zinc-900 border border-zinc-800 p-4">
+	<div class="flex items-center justify-between">
+		<h3 class="font-medium text-zinc-100">
+			{name}
+		</h3>
+
+		<span
+			class={`text-sm font-medium ${isOk ? 'text-emerald-400' : 'text-red-400'}`}
+		>
+			● {status.toUpperCase()}
+		</span>
+	</div>
+
+	<div class="mt-2 text-xs text-zinc-400">
+		Last checked: {new Date(time).toUTCString()}
+	</div>
+</div>
